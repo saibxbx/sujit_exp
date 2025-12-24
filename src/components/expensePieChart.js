@@ -60,16 +60,12 @@ export function renderExpensePieChart(container) {
 
     const canvas = wrapper.querySelector('#expense-pie-chart');
     const legendContainer = wrapper.querySelector('#custom-legend');
-    const centerTotal = wrapper.querySelector('#center-total');
     let chartInstance = null;
 
     function render() {
         const expenses = getExpenses();
         const totalExpenses = getTotalExpenses();
         const salary = getSalary();
-
-        // Update center total
-        centerTotal.textContent = `₹${totalExpenses.toLocaleString()}`;
 
         if (expenses.length === 0) {
             if (chartInstance) {
@@ -111,6 +107,12 @@ export function renderExpensePieChart(container) {
 
         const canvasEl = wrapper.querySelector('#expense-pie-chart');
         const ctx = canvasEl.getContext('2d');
+
+        // Update center total (query fresh each time as container may have been recreated)
+        const centerTotal = wrapper.querySelector('#center-total');
+        if (centerTotal) {
+            centerTotal.textContent = `₹${totalExpenses.toLocaleString()}`;
+        }
 
         const labels = expenses.map(e => e.name);
         const data = expenses.map(e => e.amount);

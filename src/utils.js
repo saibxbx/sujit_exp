@@ -48,8 +48,10 @@ export function getExpenses() {
  */
 export function addExpense(name, amount) {
   const data = getData();
+  // Use combination of timestamp and random number to ensure unique IDs
+  const uniqueId = Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
   data.expenses.push({
-    id: Date.now(),
+    id: uniqueId,
     name: name.trim(),
     amount: parseFloat(amount)
   });

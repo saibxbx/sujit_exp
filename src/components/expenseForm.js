@@ -74,7 +74,7 @@ export function renderExpenseForm(container) {
         // Remove expense buttons
         wrapper.querySelectorAll('.btn-remove').forEach(btn => {
             btn.addEventListener('click', () => {
-                const id = parseInt(btn.dataset.id);
+                const id = btn.dataset.id;
                 removeExpense(id);
                 render();
                 document.dispatchEvent(new CustomEvent('dataChanged'));
