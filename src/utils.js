@@ -63,7 +63,8 @@ export function addExpense(name, amount) {
  */
 export function removeExpense(id) {
   const data = getData();
-  data.expenses = data.expenses.filter(e => e.id !== id);
+  // Convert both to string for comparison to handle legacy numeric IDs and new string IDs
+  data.expenses = data.expenses.filter(e => String(e.id) !== String(id));
   saveData(data);
 }
 
