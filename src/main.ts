@@ -5,8 +5,9 @@ import { renderBalanceSummary } from './components/balanceSummary.js';
 import { renderExpensePieChart } from './components/expensePieChart.js';
 
 // Build the main app layout
-const app = document.querySelector('#app');
-app.innerHTML = `
+const app = document.querySelector<HTMLDivElement>('#app');
+if (app) {
+  app.innerHTML = `
   <div class="app-container">
     <header class="header">
       <div class="header-brand">
@@ -27,8 +28,9 @@ app.innerHTML = `
   </div>
 `;
 
-// Render all components
-renderSalaryInput(document.getElementById('salary-section'));
-renderBalanceSummary(document.getElementById('balance-section'));
-renderExpenseForm(document.getElementById('expense-section'));
-renderExpensePieChart(document.getElementById('chart-section'));
+  // Render all components
+  renderSalaryInput(document.getElementById('salary-section'));
+  renderBalanceSummary(document.getElementById('balance-section'));
+  renderExpenseForm(document.getElementById('expense-section'));
+  renderExpensePieChart(document.getElementById('chart-section'));
+}
