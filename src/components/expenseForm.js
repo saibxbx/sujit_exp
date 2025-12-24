@@ -41,48 +41,55 @@ export function renderExpenseForm(container) {
             }
             </div>
         `;
+    }
 
-        const nameInput = wrapper.querySelector('#expense-name');
-        const amountInput = wrapper.querySelector('#expense-amount');
-        const addBtn = wrapper.querySelector('#add-expense-btn');
+    function setupEventListeners() {
+        // Use event delegation on the wrapper for better handling of dynamic elements
+        wrapper.addEventListener('click', (e) => {
+            // Handle Add button click
+            if (e.target.id === 'add-expense-btn') {
+                const nameInput = wrapper.querySelector('#expense-name');
+                const amountInput = wrapper.querySelector('#expense-amount');
+                const name = nameInput.value.trim();
+                const amount = parseFloat(amountInput.value);
 
-        addBtn.addEventListener('click', () => {
-            const name = nameInput.value.trim();
-            const amount = parseFloat(amountInput.value);
-
-            if (name && amount > 0) {
-                addExpense(name, amount);
-                nameInput.value = '';
-                amountInput.value = '';
-                render();
-                document.dispatchEvent(new CustomEvent('dataChanged'));
-            } else {
-                if (!name) nameInput.focus();
-                else amountInput.focus();
-            }
-        });
-
-        // Add enter key support
-        [nameInput, amountInput].forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    addBtn.click();
+                if (name && amount > 0) {
+                    addExpense(name, amount);
+                    nameInput.value = '';
+                    amountInput.value = '';
+                    render();
+                    document.dispatchEvent(new CustomEvent('dataChanged'));
+                } else {
+                    if (!name) nameInput.focus();
+                    else amountInput.focus();
                 }
-            });
-        });
+            }
 
-        // Remove expense buttons
-        wrapper.querySelectorAll('.btn-remove').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.dataset.id;
+            // Handle Remove button click
+            if (e.target.classList.contains('btn-remove')) {
+                const id = e.target.dataset.id;
                 removeExpense(id);
                 render();
                 document.dispatchEvent(new CustomEvent('dataChanged'));
-            });
+            }
+        });
+
+        // Add enter key support using event delegation
+        wrapper.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && (e.target.id === 'expense-name' || e.target.id === 'expense-amount')) {
+                const addBtn = wrapper.querySelector('#add-expense-btn');
+                addBtn.click();
+            }
         });
     }
 
     render();
-    document.addEventListener('dataChanged', render);
+    setupEventListeners();
+
+    // Listen for external data changes (from other components)
+    document.addEventListener('dataChanged', () => {
+        render();
+    });
+
     container.appendChild(wrapper);
 }
